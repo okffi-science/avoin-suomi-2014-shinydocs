@@ -1,0 +1,212 @@
+---
+title: "Luottamus"
+output: 
+    html_document:
+      theme: spacelab
+runtime: shiny
+---
+
+[Takaisin etusivulle](https://okffi-science.github.io/avoin-suomi-2014)
+
+</br>
+<hr>
+
+
+# Luottamus ihmisiin ja yhteiskuntaan
+
+
+## Luottamus ihmisiin
+
+**Voiko mielestänne ihmisiin luottaa, vai onko niin, ettei ihmisten suhteen voi olla liian varovainen. Kertokaa mielipiteenne asteikolla nollasta kymmeneen, jossa nolla tarkoittaa, ettei ihmisten kanssa voi olla liian varovainen ja 10, että useimpiin ihmisiin voi luottaa?**
+
+
+```{r, echo=FALSE}
+source("funktiot.R")
+
+
+shinyApp(
+  
+  ui = fluidPage(
+
+  sidebarLayout(
+    
+    sidebarPanel(
+      radioButtons("trust", "",
+             c("Et voi olla liian varovainen" = 0,
+               "1" = 1,
+               "2" = 2,
+               "3" = 3,
+               "4" = 4,
+               "5" = 5,
+               "6" = 6,
+               "7" = 7,
+               "8" = 8,
+               "9" = 9,
+               "Useimpiin voi luottaa"=10))
+    ),
+  
+    mainPanel(
+      tabsetPanel(
+        tabPanel("Kartta", plotOutput("kartta")),
+        tabPanel("Jakauma", plotOutput("laatikkojana")), 
+        tabPanel("Tolpat", plotOutput("tolppa")) 
+      )
+    )
+  )
+  ),
+  
+  server = function(input, output) {
+    output$laatikkojana <- renderPlot({
+              ess_laatikkojana(var="ess$ppltrst",
+              value = as.numeric(input$trust),
+              mini = "You can't be too careful",
+              maxi = "Most people can be trusted")
+    })
+    output$tolppa <- renderPlot({
+              ess_tolppa(var="ess$ppltrst",
+              value = as.numeric(input$trust),
+              mini = "You can't be too careful",
+              maxi = "Most people can be trusted")
+    })
+    output$kartta <- renderPlot({
+              ess_kartta(var="ess$ppltrst",
+              value = as.numeric(input$trust),
+              mini = "You can't be too careful",
+              maxi = "Most people can be trusted")
+    })    
+    
+  },
+  
+  options = list(height = 500)
+)
+```
+
+
+**Katsotteko, että useimmiten ihmiset pyrkivät olemaan auttavaisia toisia kohtaan vai että enimmäkseen he ajattelevat vain omaa etuaan?**
+
+
+```{r, echo=FALSE}
+shinyApp(
+  
+  ui = fluidPage(
+
+  sidebarLayout(
+    
+    sidebarPanel(
+      radioButtons("fair", "",
+             c("Ihmiset ajattelevat enimmäkseen omaa etuaan" = 0,
+               "1" = 1,
+               "2" = 2,
+               "3" = 3,
+               "4" = 4,
+               "5" = 5,
+               "6" = 6,
+               "7" = 7,
+               "8" = 8,
+               "9" = 9,
+               "Ihmiset yrittävät enimmäkseen olla auttavaisia"=10))
+    ),
+  
+    mainPanel(
+      tabsetPanel(
+        tabPanel("Kartta", plotOutput("kartta")),
+        tabPanel("Jakauma", plotOutput("laatikkojana")), 
+        tabPanel("Tolpat", plotOutput("tolppa")) 
+      )
+    )
+  )
+  ),
+  
+  server = function(input, output) {
+    
+    output$laatikkojana <- renderPlot({
+              ess_laatikkojana(var="ess$pplfair",
+              value = as.numeric(input$fair),
+              mini <- "Most people try to take advantage of me",
+              maxi <- "Most people try to be fair")
+    })
+    output$tolppa <- renderPlot({
+              ess_tolppa(var="ess$pplfair",
+              value = as.numeric(input$fair),
+              mini <- "Most people try to take advantage of me",
+              maxi <- "Most people try to be fair")
+    })
+    output$kartta <- renderPlot({
+              ess_kartta(var="ess$pplfair",
+              value = as.numeric(input$fair),
+              mini <- "Most people try to take advantage of me",
+              maxi <- "Most people try to be fair")
+    })    
+    
+  },
+  
+  options = list(height = 500)
+)
+```
+
+## Luottamus yhteiskuntaan
+
+**Suomessa tiedotusvälineet tarjoavat kansalaisille luotettavaa tietoa, jonka perusteella arvioida hallituksen toimintaa?**
+
+
+```{r meprinfc, echo=FALSE}
+shinyApp(
+  
+  ui = fluidPage(
+
+  sidebarLayout(
+    
+    sidebarPanel(
+      radioButtons("meprinfc", "",
+             c("Ei sovi lainkaan" = 0,
+               "1" = 1,
+               "2" = 2,
+               "3" = 3,
+               "4" = 4,
+               "5" = 5,
+               "6" = 6,
+               "7" = 7,
+               "8" = 8,
+               "9" = 9,
+               "Sopii täydellisesti"=10))
+    ),
+  
+    mainPanel(
+      tabsetPanel(
+        tabPanel("Kartta", plotOutput("kartta")),
+        tabPanel("Jakauma", plotOutput("laatikkojana")), 
+        tabPanel("Tolpat", plotOutput("tolppa")) 
+      )
+    )
+  )
+  ),
+  
+  server = function(input, output) {
+    
+    mini <- "Does not apply at all"
+    maxi <- "Applies completely"
+    
+    output$laatikkojana <- renderPlot({
+              ess_laatikkojana(var="ess$meprinfc",
+              value = as.numeric(input$meprinfc),
+              mini <- mini,
+              maxi <- maxi)
+    })
+    output$tolppa <- renderPlot({
+              ess_tolppa(var="ess$meprinfc",
+              value = as.numeric(input$meprinfc),
+              mini <- mini,
+              maxi <- maxi)
+    })
+    output$kartta <- renderPlot({
+              ess_kartta(var="ess$meprinfc",
+              value = as.numeric(input$meprinfc),
+              mini <- mini,
+              maxi <- maxi)
+    })    
+    
+  },
+  
+  options = list(height = 500)
+)
+```

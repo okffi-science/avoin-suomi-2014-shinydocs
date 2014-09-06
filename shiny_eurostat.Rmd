@@ -1,0 +1,58 @@
+---
+title: "Eurostat"
+output: 
+    html_document:
+      theme: spacelab
+runtime: shiny
+---
+
+[Takaisin etusivulle](https://okffi-science.github.io/avoin-suomi-2014)
+
+</br>
+<hr>
+
+## Kotitalouksien tulojen kehitys
+
+**pelkkää testausta..**
+
+```{r, echo=FALSE}
+
+
+inputPanel(
+  sliderInput("min", label = "Eka vuosi:",
+              min = 1990, max = 2011, value = 1990, step = 1),
+  
+  sliderInput("max", label = "Vika vuosi:",
+              min = 1990, max = 2030, value = 2030, step = 1)
+)
+
+renderPlot({
+  minim <- as.numeric(input$min)
+  maxim <- as.numeric(input$max)
+  
+  library(SmarterPoland)
+  searchresults <- grepEurostatTOC("material deprivation")
+  df <- getEurostatRCV(kod = "ilc_mddd21")
+
+  # Plot at nuts2-level
+
+  # time variable into numerical
+  df$time <- as.numeric(levels(df$time))[df$time]
+  cname <- subset(df, time == 2011)
+
+  # plot
+  library(ggplot2)
+  ggplot(df, aes(x = time, y = value, color = geo, group = geo)) + 
+    geom_point() + 
+    geom_line() + 
+    geom_text(data = cname, aes(x = time, y = value, label = geo), hjust = -0.3) +
+    theme(legend.position = "none") +
+    labs(title = "material deprivation in EU at NUTS2-level", y = "population share (%)") + 
+    coord_cartesian(xlim = c(minim, maxim)) + 
+    scale_x_continuous(breaks = minim:maxim)
+})
+```
+
+
+
+

@@ -1,0 +1,151 @@
+---
+title: "Demokratia"
+output: 
+    html_document:
+      theme: spacelab
+runtime: shiny
+---
+[Takaisin etusivulle](https://okffi-science.github.io/avoin-suomi-2014)
+
+</br>
+<hr>
+
+
+# Mielipiteet demokratiasta
+
+## Demokratia yleisesti
+
+**Kuinka tärkeänä demokratian kannalta yleisesti pidätte sitä, että Valtiolliset vaalit ovat vapaat ja rehelliset?**
+
+
+```{r fairelc, echo=FALSE}
+source("funktiot.R")
+
+shinyApp(
+  
+  ui = fluidPage(
+
+  sidebarLayout(
+    
+    sidebarPanel(
+      radioButtons("fairelc", "",
+             c("En lainkaan tärkeänä demokratian kannalta yleisesti" = 0,
+               "1" = 1,
+               "2" = 2,
+               "3" = 3,
+               "4" = 4,
+               "5" = 5,
+               "6" = 6,
+               "7" = 7,
+               "8" = 8,
+               "9" = 9,
+               "Äärimmäisen tärkeänä demokratian kannalta yleisesti"=10))
+    ),
+  
+    mainPanel(
+      tabsetPanel(
+        tabPanel("Kartta", plotOutput("kartta")),
+        tabPanel("Jakauma", plotOutput("laatikkojana")), 
+        tabPanel("Tolpat", plotOutput("tolppa")) 
+      )
+    )
+  )
+  ),
+  
+  server = function(input, output) {
+    
+    mini <- "Not at all important for democracy in general"
+    maxi <- "Extremely important for democracy in general"
+    
+    output$laatikkojana <- renderPlot({
+              ess_laatikkojana(var="ess$fairelc",
+              value = as.numeric(input$fairelc),
+              mini <- mini,
+              maxi <- maxi)
+    })
+    output$tolppa <- renderPlot({
+              ess_tolppa(var="ess$fairelc",
+              value = as.numeric(input$fairelc),
+              mini <- mini,
+              maxi <- maxi)
+    })
+    output$kartta <- renderPlot({
+              ess_kartta(var="ess$fairelc",
+              value = as.numeric(input$fairelc),
+              mini <- mini,
+              maxi <- maxi)
+    })    
+    
+  },
+  
+  options = list(height = 500)
+)
+```
+
+
+## Demokratia Suomessa
+
+**Miten hyvin seuraavat väittämät mielestänne sopivat Suomeen? Valtiolliset vaalit ovat Suomessa vapaat ja rehelliset?**
+
+
+```{r fairelcc, echo=FALSE}
+shinyApp(
+  
+  ui = fluidPage(
+
+  sidebarLayout(
+    
+    sidebarPanel(
+      radioButtons("fairelcc", "",
+             c("Ei sovi lainkaan" = 0,
+               "1" = 1,
+               "2" = 2,
+               "3" = 3,
+               "4" = 4,
+               "5" = 5,
+               "6" = 6,
+               "7" = 7,
+               "8" = 8,
+               "9" = 9,
+               "Sopii täydellisesti"=10))
+    ),
+  
+    mainPanel(
+      tabsetPanel(
+        tabPanel("Kartta", plotOutput("kartta")),
+        tabPanel("Jakauma", plotOutput("laatikkojana")), 
+        tabPanel("Tolpat", plotOutput("tolppa")) 
+      )
+    )
+  )
+  ),
+  
+  server = function(input, output) {
+    
+    mini <- "Does not apply at all"
+    maxi <- "Applies completely"
+    
+    output$laatikkojana <- renderPlot({
+              ess_laatikkojana(var="ess$fairelcc",
+              value = as.numeric(input$fairelcc),
+              mini <- mini,
+              maxi <- maxi)
+    })
+    output$tolppa <- renderPlot({
+              ess_tolppa(var="ess$fairelcc",
+              value = as.numeric(input$fairelcc),
+              mini <- mini,
+              maxi <- maxi)
+    })
+    output$kartta <- renderPlot({
+              ess_kartta(var="ess$fairelcc",
+              value = as.numeric(input$fairelcc),
+              mini <- mini,
+              maxi <- maxi)
+    })    
+    
+  },
+  
+  options = list(height = 500)
+)
+```

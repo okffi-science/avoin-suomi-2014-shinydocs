@@ -1,0 +1,84 @@
+---
+title: "European Social Survey"
+output: 
+    html_document:
+      theme: spacelab
+runtime: shiny
+---
+
+[Takaisin etusivulle](https://okffi-science.github.io/avoin-suomi-2014)
+
+</br>
+<hr>
+
+
+# Mielipiteet hyvinvointipolitiikasta
+
+**Kuinka hyvin seuraavat väittämät mielestänne sopivat Suomeen?**
+
+1. *Suomessa hallitus suojelee kaikkia kansalaisia köyhyydeltä?*
+
+
+```{r gvctzpvc, echo=FALSE}
+source("funktiot.R")
+
+shinyApp(
+  
+  ui = fluidPage(
+
+  sidebarLayout(
+    
+    sidebarPanel(
+      radioButtons("gvctzpvc", "",
+             c("Ei sovi lainkaan" = 0,
+               "1" = 1,
+               "2" = 2,
+               "3" = 3,
+               "4" = 4,
+               "5" = 5,
+               "6" = 6,
+               "7" = 7,
+               "8" = 8,
+               "9" = 9,
+               "Sopii täydellisesti"=10))
+    ),
+  
+    mainPanel(
+      tabsetPanel(
+        tabPanel("Kartta", plotOutput("kartta")),
+        tabPanel("Jakauma", plotOutput("laatikkojana")), 
+        tabPanel("Tolpat", plotOutput("tolppa")) 
+      )
+    )
+  )
+  ),
+  
+  server = function(input, output) {
+    
+    mini <- "Does not apply at all"
+    maxi <- "Applies completely"
+    
+    output$laatikkojana <- renderPlot({
+              ess_laatikkojana(var="ess$gvctzpvc",
+              value = as.numeric(input$gvctzpvc),
+              mini <- mini,
+              maxi <- maxi)
+    })
+    output$tolppa <- renderPlot({
+              ess_tolppa(var="ess$gvctzpvc",
+              value = as.numeric(input$gvctzpvc),
+              mini <- mini,
+              maxi <- maxi)
+    })
+    output$kartta <- renderPlot({
+              ess_kartta(var="ess$gvctzpvc",
+              value = as.numeric(input$gvctzpvc),
+              mini <- mini,
+              maxi <- maxi)
+    })    
+    
+  },
+  
+  options = list(height = 500)
+)
+```

@@ -1,0 +1,14 @@
+---
+title: "European Social Survey"
+output: 
+    html_document:
+      theme: spacelab
+      toc: true
+runtime: shiny
+---
+
+</br>
+<hr>
+
+[Takaisin etusivulle](https://okffi-science.github.io/avoin-suomi-2014)
+

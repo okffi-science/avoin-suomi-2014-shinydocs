@@ -1,0 +1,148 @@
+---
+title: "Elämänhallinta"
+output: 
+    html_document:
+      theme: spacelab
+runtime: shiny
+---
+
+[Takaisin etusivulle](https://okffi-science.github.io/avoin-suomi-2014)
+
+</br>
+<hr>
+
+# Kokemus elämänhallinnasta
+
+**Missä määrin teistä tuntuu siltä, että tiedätte, mihin suuntaan elämänne on menossa? 0 tarkoittaa ei lainkaan ja 10 äärimmäisen paljon.**
+
+
+```{r sedirlf, echo=FALSE}
+source("funktiot.R")
+
+
+shinyApp(
+  
+  ui = fluidPage(
+
+  sidebarLayout(
+    
+    sidebarPanel(
+      radioButtons("sedirlf", "",
+             c("En lainkaan" = 0,
+               "1" = 1,
+               "2" = 2,
+               "3" = 3,
+               "4" = 4,
+               "5" = 5,
+               "6" = 6,
+               "7" = 7,
+               "8" = 8,
+               "9" = 9,
+               "Äärimmäisen paljon"=10))
+    ),
+  
+    mainPanel(
+      tabsetPanel(
+        tabPanel("Kartta", plotOutput("kartta")),
+        tabPanel("Jakauma", plotOutput("laatikkojana")), 
+        tabPanel("Tolpat", plotOutput("tolppa")) 
+      )
+    )
+  )
+  ),
+  
+  server = function(input, output) {
+    
+    mini <- "Not at all"
+    maxi <- "Completely"
+    
+    output$laatikkojana <- renderPlot({
+              ess_laatikkojana(var="ess$sedirlf",
+              value = as.numeric(input$sedirlf),
+              mini <- mini,
+              maxi <- maxi)
+    })
+    output$tolppa <- renderPlot({
+              ess_tolppa(var="ess$sedirlf",
+              value = as.numeric(input$sedirlf),
+              mini <- mini,
+              maxi <- maxi)
+    })
+    output$kartta <- renderPlot({
+              ess_kartta(var="ess$sedirlf",
+              value = as.numeric(input$sedirlf),
+              mini <- mini,
+              maxi <- maxi)
+    })    
+    
+  },
+  
+  options = list(height = 500)
+)
+```
+
+
+**Jotkut ihmiset ovat lähempänä yhteiskuntamme huippua ja toiset (M) lähempänä sen pohjaa. Mihin kohtaan tällä asteikolla sijoittaisitte tällä hetkellä itsenne?**
+
+
+```{r plinsoc, echo=FALSE}
+shinyApp(
+  
+  ui = fluidPage(
+
+  sidebarLayout(
+    
+    sidebarPanel(
+      radioButtons("plinsoc", "",
+             c("Yhteiskuntamme pohja" = 0,
+               "1" = 1,
+               "2" = 2,
+               "3" = 3,
+               "4" = 4,
+               "5" = 5,
+               "6" = 6,
+               "7" = 7,
+               "8" = 8,
+               "9" = 9,
+               "Yhteiskuntamme huippu"=10))
+    ),
+  
+    mainPanel(
+      tabsetPanel(
+        tabPanel("Kartta", plotOutput("kartta")),
+        tabPanel("Jakauma", plotOutput("laatikkojana")), 
+        tabPanel("Tolpat", plotOutput("tolppa")) 
+      )
+    )
+  )
+  ),
+  
+  server = function(input, output) {
+    
+    mini <- "Bottom of our society"
+    maxi <- "Top of our society"
+    
+    output$laatikkojana <- renderPlot({
+              ess_laatikkojana(var="ess$plinsoc",
+              value = as.numeric(input$plinsoc),
+              mini <- mini,
+              maxi <- maxi)
+    })
+    output$tolppa <- renderPlot({
+              ess_tolppa(var="ess$plinsoc",
+              value = as.numeric(input$plinsoc),
+              mini <- mini,
+              maxi <- maxi)
+    })
+    output$kartta <- renderPlot({
+              ess_kartta(var="ess$plinsoc",
+              value = as.numeric(input$plinsoc),
+              mini <- mini,
+              maxi <- maxi)
+    })    
+    
+  },
+  
+  options = list(height = 500)
+)
+```
